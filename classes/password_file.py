@@ -1,25 +1,28 @@
 import sys
 from typing import List, Dict
 from pathlib import Path
-from main import SQL
+
+from classes.SQL import SQL
 
 
 class PasswordFile:
-    def __init__(self, path: str, sql):
+    def __init__(self, path: Path, sql):
         self.path = path
-        self.collection = Path(self.path).parent.name
+        self.collection = self.path.parent.name
         self.parse_file(sql)
         sql.connection.commit()
 
     def parse_file(self, sql : SQL):
-        with open(self.path, 'r') as this_file:
+        with self.path.open('r') as this_file:
             for line in this_file:
                 separator = self.best_separator(line)
                 query = "INSERT INTO passwords values (NULL, %s, %s, %s)"
-                username, password = line.split(separator)
+                try:
+                    username, password = line.split(separator)
 
-                sql.cursor.execute(query, (username, password, self.collection))
-
+                    sql.cursor.execute(query, (username, password, self.collection))
+                except ValueError:
+                    print("Could not parse:\n\t"+line, file=sys.stderr)
 
     @staticmethod
     def best_separator(line: str, separators=None, type: str = "FIRST"):

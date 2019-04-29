@@ -1,47 +1,31 @@
-import pymysql
+import sys
+from pathlib import Path
 
 import pymysql
 
+import pymysql
+
+from classes.SQL import SQL
 from classes.password_file import PasswordFile
 
-conn = pymysql.connect(host='192.168.2.224', user='root', passwd='password', db='passwords')
-cur = conn.cursor()
-cur.execute("SELECT * FROM passwords")
-for response in cur:
-    print(response)
-cur.close()
-conn.close()
+# _sqlconnection = None
+
+# def read_files(file_paths):
+#     if _sqlconnection is None:
+#         _
+#     for file in file_paths:
+#         pf = PasswordFile(path=file, sql=_sqlconnection)
 
 
-class SQL:
-    def __init__(self, username, password, database, host):
-        self.username = username
-        self.password = password
-        self.db = database
-        self.host = host
-        self.connection = pymysql.connect(host=self.host,
-                                          user=self.username,
-                                          password=self.password,
-                                          db=self.db)
+if __name__ == '__main__':
+    sqlconnection = SQL(username="root", password="password", database="passwords", host="192.168.2.224")
+    try:
+        startingdir = sys.argv[1]
+    except:
+        print("Please provide a starting directory\ne.g. " + sys.argv[0] + " /media")
+        sys.exit(-1)
 
-        self.cursor = self.connection.cursor()
-
-    def get_connection(self):
-        return self.connection
-
-    def get_cursor(self):
-        return self.cursor
-
-    def __del__(self):
-        self.cursor.close()
-        self.connection.close()
-
-
-
-def read_files(file_paths):
-    sql = SQL(username="root", password="password", database="passwords", host="192.168.2.224")
-    for file in file_paths:
-        pf = PasswordFile(path=file, sql=sql)
-
-
-
+    startingdir = Path(startingdir)
+    files = list(startingdir.rglob("*.[tT][xX][tT]"))
+    for file in files:
+        pf = PasswordFile(path=file, sql=sqlconnection)
