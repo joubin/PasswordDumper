@@ -18,7 +18,7 @@ class PasswordFile:
                 separator = self.best_separator(line)
                 query = "INSERT INTO passwords values (NULL, %s, %s, %s)"
                 try:
-                    username, password = line.split(separator)
+                    username, password = line.split(separator, maxsplit=1)
 
                     sql.cursor.execute(query, (username, password, self.collection))
                 except ValueError:
@@ -46,4 +46,7 @@ class PasswordFile:
 
 
 if __name__ == '__main__':
-    file = PasswordFile(path="../testdata.txt")
+    test = "barsik.ukushevich@mail.ru:nyancatiloveyou:3"
+    username, password = test.split(PasswordFile.best_separator(test), 1)
+    print(username)
+    print(password)
