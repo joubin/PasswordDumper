@@ -10,7 +10,8 @@ class SQL:
         self.connection = pymysql.connect(host=self.host,
                                           user=self.username,
                                           password=self.password,
-                                          db=self.db)
+                                          db=self.db, autocommit=True
+)
 
         self.cursor = self.connection.cursor()
 
