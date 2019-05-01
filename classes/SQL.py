@@ -11,7 +11,7 @@ class SQL:
                                           user=self.username,
                                           password=self.password,
                                           db=self.db, autocommit=True
-)
+                                          )
 
         self.cursor = self.connection.cursor()
 

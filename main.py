@@ -1,20 +1,8 @@
 import sys
 from pathlib import Path
-
-import pymysql
-
-import pymysql
-
 from classes.SQL import SQL
 from classes.password_file import PasswordFile
-
-# _sqlconnection = None
-
-# def read_files(file_paths):
-#     if _sqlconnection is None:
-#         _
-#     for file in file_paths:
-#         pf = PasswordFile(path=file, sql=_sqlconnection)
+import threading
 
 
 if __name__ == '__main__':
@@ -27,5 +15,10 @@ if __name__ == '__main__':
 
     startingdir = Path(startingdir)
     files = list(startingdir.rglob("*.[tT][xX][tT]"))
+    threads = []
     for file in files:
-        pf = PasswordFile(path=file, sql=sqlconnection)
+        t = threading.Thread(target=PasswordFile, args=(file, sqlconnection))
+        threads.append(t)
+        t.start()
+        
+
