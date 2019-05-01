@@ -9,7 +9,10 @@ class PasswordFile:
     def __init__(self, path: Path, sql):
         self.path = path
         self.collection = self.path.parent.name
-        self.parse_file(sql)
+        self.sql = sql
+
+    def do_work(self):
+        self.parse_file(self.sql)
         sql.connection.commit()
 
     def parse_file(self, sql : SQL):
