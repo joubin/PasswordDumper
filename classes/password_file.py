@@ -13,6 +13,7 @@ class PasswordFile:
         sql.connection.commit()
 
     def parse_file(self, sql : SQL):
+        print("Starting")
         with self.path.open('r') as this_file:
             for line in this_file:
                 separator = self.best_separator(line)
